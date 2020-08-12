@@ -1,0 +1,110 @@
+---
+# tasks file for oracle_health_check
+
+  - name: pmoncheck
+    become: yes
+    become_user: grid
+    pmoncheck:
+         db_name      : '{{ db_name }}'
+         state        : pmon
+
+    register: pmoncheck
+
+  - debug:  var=pmoncheck
+
+  - name: listenerstop
+    become: yes
+    become_user: grid
+    environment       : "{{ oracle_env }}"
+    listenerstop:
+         nodename     : '{{ nodename }}'
+         oracle_home  : '{{ oracle_home }}'
+         grid_home    : '{{ grid_home }}'
+         listener_name: '{{ listener_name }}'
+         state        : lsnrctlstop
+         username     : grid
+    register: listenerstop
+
+  - debug:  var=listenerstop
+
+
+  - name: listenerstatus
+    become: yes
+    become_user: grid
+    environment       : "{{ oracle_env }}"
+    listenerstatus:
+         nodename     : '{{ nodename }}'
+         oracle_home  : '{{ oracle_home }}'
+         grid_home    : '{{ grid_home }}'
+         listener_name: '{{ listener_name }}'
+#         db_name      : '{{ db_name }}'
+         state        : lsnrctl
+         username     : grid
+    register: listenerstatus
+
+  - debug:  var=listenerstatus
+
+  - name: listenerstart
+    become: yes
+    become_user: grid
+    environment       : "{{ oracle_env }}"
+    listenerstart:
+         nodename     : '{{ nodename }}'
+         oracle_home  : '{{ oracle_home }}'
+         grid_home    : '{{ grid_home }}'
+         listener_name: '{{ listener_name }}'
+         state        : lsnrctlstart
+         username     : grid
+    register: listenerstart
+
+  - debug:  var=listenerstart
+
+  - name: dblist
+    dblist:
+         nodename     : '{{ nodename }}'
+         oracle_home  : '{{ oracle_home }}'
+         db_name      : '{{ db_name }}'
+         dbstate      : dblist
+    environment       : "{{ oracle_env }}"
+    register: dblist
+
+  - debug:  var=dblist
+
+  - name: tnsoslevel
+    tns:
+         state        : tnscheck
+    register: tnsoslevel
+
+  - debug:  var=tnsoslevel
+
+  - name: hasstatus
+    ohascheck:
+         nodename     : '{{ nodename }}'
+         grid_home    : '{{ grid_home }}'
+         state        :  hasstatus
+    environment       : "{{ grid_env }}"
+    register: hasstatus
+
+  - debug:  var=hasstatus
+
+  - name: cssstatus
+    csscheck:
+         nodename     : '{{ nodename }}'
+         grid_home    : '{{ grid_home }}'
+         state        :  cssstatus
+    environment       : "{{ grid_env }}"
+    register: cssstatus
+
+  - debug:  var=cssstatus
+
+
+  - name: evmstatus
+    evmcheck:
+         nodename     : '{{ nodename }}'
+         grid_home    : '{{ grid_home }}'
+         evmstate        :  evmstatus
+    environment       : "{{ grid_env }}"
+    register: evmstatus
+
+  - debug:  var=evmstatus
+
