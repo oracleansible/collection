@@ -1,0 +1,22 @@
+---
+# vars file for oracle_health_check
+
+
+      nodename:      "{{ lookup('ini', 'nodename      section=db_info    file=/tmp/info.ini') }}"
+      oracle_home:   "{{ lookup('ini', 'oracle_home   section=db_info    file=/tmp/info.ini') }}"
+      grid_home:     "{{ lookup('ini', 'grid_home     section=db_info    file=/tmp/info.ini') }}"
+      username:      "{{ lookup('ini', 'username      section=db_info    file=/tmp/info.ini') }}"
+      db_name:       "{{ lookup('ini', 'db_name       section=db_info    file=/tmp/info.ini') }}"
+      listener_name: "{{ lookup('ini', 'listener_name section=db_info    file=/tmp/info.ini') }}"
+      oracle_sid:    "{{ lookup('ini', 'oracle_sid    section=db_info    file=/tmp/info.ini') }}"
+      oracle_env:
+
+           ORACLE_HOME: "{{ oracle_home }}"
+           LD_LIBRARY_PATH: "{{ oracle_home }}/lib"
+
+      grid_env:
+
+           ORACLE_SID: "{{ oracle_sid }}"
+           GRID_HOME: "{{ grid_home }}"
+           LD_LIBRARY_PATH: "{{ grid_home }}/lib"
+
