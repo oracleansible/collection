@@ -1,0 +1,7 @@
+
+---
+- hosts: orcl
+  remote_user: root
+  roles:
+    - oracle_health_check
+
